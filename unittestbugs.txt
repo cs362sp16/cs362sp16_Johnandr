@@ -1,0 +1,32 @@
+PROGRAMMER NAME : Andrew Johnson
+
+Unit Testing Bugs
+
+	No bugs from unittests 1-4. 
+	Functions tested where
+		getCost();
+		kingdomCards();
+		numHandCards();
+		whoseTurn();
+
+Unit testing for Cards
+
+	Testing for Outpost:
+		It seems like the outpost function works great in cardEffect.
+		CardEffect works proper when using this card!
+
+	Testing for Salvager:
+		It seems like the adding coins and adding buys isn't working properly.
+		For adding coins, I believe the reason is from getCost function.
+		CardEffect works properly when using this card!
+
+	Testing for Steward:
+		It looks like steward is working perfectly with cardEffect.
+		Got to check multiple choice 1 options. Worked for both options. 
+		Mostly checked with the coins option worked properly.
+		CardEffect works properly when using this card!
+
+	Testing for Baron:
+		It seems like the baron function works great in cardEffect.
+		Tested the option of choice1 = 0 and 1 to test both parts 
+		of the card multiple times. 

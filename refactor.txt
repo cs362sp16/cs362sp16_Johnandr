@@ -1,0 +1,36 @@
+PROGRAMMER : 	ANDREW JOHNSON
+UPDATE NOTES:	ASSIGNMENT 1
+
+Change 1: REFACTORED ADVENTURER CARD
+
+	I took all code associated with adventurer and placed it
+	in a function called adventurer_Card, and sent in neccesary
+	inputs for the function to work properly. 
+	Saw cardDrawn was only used for adventurer so I commented
+	it out in cardEffect and initalized it in adventuer_Card.
+
+Change 2: REFACTORED BARON CARD
+
+	I took all of baron's code and place in the function called
+	baron_Card. Only needed to send in choice1, state, and currentPlayer.
+	Nothing else majorly important.
+
+Change 3: REFACTORED TRIBUTE CARD
+
+	Moved all of tribute's code int function called tribute_Card.
+	Also moved tributeRevealedCards into the function, since 
+	tribute is the only function using the variable. 
+	Had to initialize i in the function as well for the for loops
+
+Change 4: REFACTORED AMBASSADOR CARD
+
+	Moved all code of ambassador in switch statement to 
+	function ambassdor_Card. Had to initialize i and j for
+	the function.
+
+Change 5: REFACTORED FEAST CARD
+
+	Moved all code of feast from switch statement to the
+	function feast_Card. Had to initialize i, and decided
+	to move x from cardEffect to feast_Card since feast
+	is the only card using x.
