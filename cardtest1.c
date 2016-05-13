@@ -49,7 +49,7 @@ int main(int argc, char const *argv[]){
 	}
 	
 	if (testSwitch == 0)
-		printf("cardtest1 [outpostCard()] shows no errors.\n");
+		printf("outpost shows no errors.\n");
 
 
 	return 0;

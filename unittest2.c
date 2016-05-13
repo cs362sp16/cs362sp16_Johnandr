@@ -2,10 +2,12 @@
 #include "dominion_helpers.h"
 #include <string.h>
 #include <stdio.h>
+#include <assert.h>
 #include <stdlib.h>
 #include "rngs.h"
 
 #define DEBUG 0
+#define NOISY_TEST 1
 
 int main(int argc, char const *argv[])
 {
@@ -67,7 +69,7 @@ int main(int argc, char const *argv[])
 	}
 
 	if(testSwitch == 1)
-		printf("ERROR : At least one card failed.\n");
+		printf("Error, at least one card failed.\n");
 	else
 		printf("Unittest2 [kingdomCards()] shows no errors.\n");
 
