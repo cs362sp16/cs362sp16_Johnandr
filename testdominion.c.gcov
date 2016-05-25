@@ -1,0 +1,334 @@
+        -:    0:Source:testdominion.c
+        -:    0:Graph:testdominion.gcno
+        -:    0:Data:testdominion.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include "dominion.h"
+        -:    2:#include <stdlib.h>
+        -:    3:#include "rngs.h"
+        -:    4:#include <stdio.h>
+        -:    5:#include <time.h>
+        -:    6:
+        -:    7://	Making sure there are no repeats
+       15:    8:int contains(int *hand,int card) 
+        -:    9:{
+        -:   10:	int i;
+      121:   11:	for(i = 0; i < 10; i++) 
+        -:   12:	{
+      111:   13:		if(hand[i] == card) 
+        5:   14:			return 1;
+        -:   15:	}
+       10:   16:	return 0;
+        -:   17:}
+        -:   18:
+        -:   19://	Get 10 random cards for the domion game
+        1:   20:void getKingdomCards(int *hand) {
+        1:   21:	srand(time(NULL));
+        1:   22:	int selected = 0;
+       17:   23:	while(selected < 10) {
+       15:   24:		int card = (int) (Random() * (treasure_map - adventurer) + adventurer);
+       15:   25:		if(!contains(hand, card)) 
+        -:   26:		{
+       10:   27:			hand[selected] = card;
+       10:   28:			selected ++;
+       10:   29:			printf("DEBUG Added Kingdom Card: %d\n",card);
+        -:   30:		}
+        -:   31:	}
+        1:   32:}
+        -:   33:
+        -:   34://	Took from domion.c code for ease
+      788:   35:int myGetCost(int card) 
+        -:   36:{
+      788:   37:	switch(card) 
+        -:   38:	{
+        -:   39:    	case curse:
+    #####:   40:      		return 0;
+        -:   41:    	case estate:
+    #####:   42:      		return 2;
+        -:   43:    	case duchy:
+    #####:   44:      		return 5;
+        -:   45:    	case province:
+    #####:   46:      		return 8;
+        -:   47:    	case copper:
+    #####:   48:      		return 0;
+        -:   49:    	case silver:
+    #####:   50:      		return 3;
+        -:   51:    	case gold:
+    #####:   52:    		return 6;
+        -:   53:    	case adventurer:
+       84:   54:      		return 6;
+        -:   55:    	case council_room:
+    #####:   56:      		return 5;
+        -:   57:    	case feast:
+    #####:   58:      		return 4;
+        -:   59:    	case gardens:
+    #####:   60:      		return 4;
+        -:   61:    	case mine:
+       87:   62:      		return 5;
+        -:   63:    	case remodel:
+    #####:   64:      		return 4;
+        -:   65:    	case smithy:
+    #####:   66:      		return 4;
+        -:   67:    	case village:
+    #####:   68:      		return 3;
+        -:   69:    	case baron:
+       65:   70:      		return 4;
+        -:   71:    	case great_hall:
+    #####:   72:      		return 3;
+        -:   73:    	case minion:
+       70:   74:      		return 5;
+        -:   75:    	case steward:
+       85:   76:      		return 3;
+        -:   77:    	case tribute:
+       73:   78:      		return 5;
+        -:   79:    	case ambassador:
+       73:   80:      		return 3;
+        -:   81:    	case cutpurse:
+       80:   82:      		return 4;
+        -:   83:    	case embargo:
+    #####:   84:      		return 2;
+        -:   85:    	case outpost:
+       87:   86:      		return 5;
+        -:   87:    	case salvager:
+    #####:   88:      		return 4;
+        -:   89:    	case sea_hag:
+       84:   90:      		return 4;
+        -:   91:    	case treasure_map:
+    #####:   92:      		return 4;
+        -:   93:    }
+    #####:   94:	return -1;
+        -:   95:}
+        -:   96:
+      788:   97:int findSupplyCard(int *hand, int budget) 
+        -:   98:{
+      788:   99:	int found = 0;
+     1576:  100:	while(!found) 
+        -:  101:	{
+      788:  102:		int pos = (int) (Random() * 10);
+      788:  103:		if(myGetCost(hand[pos]) <= budget) 
+      788:  104:			return hand[pos];
+        -:  105:	}
+    #####:  106:	return -1;
+        -:  107:}
+        -:  108:
+      624:  109:int findHandMoney(struct gameState *p) {
+      624:  110:	int i = 0;
+     1862:  111:	while(i<numHandCards(p)) 
+        -:  112:	{
+     1238:  113:		int money = handCard(i,p);
+     1238:  114:        if (money == copper || money == silver || money == gold)
+        -:  115:		{
+      624:  116:        	return i;
+        -:  117:		}
+      614:  118:		i++;
+        -:  119:    }
+    #####:  120:	return -1;
+        -:  121:}
+        -:  122:
+      624:  123:int getMoneyType() {
+      624:  124:	int type = (int)(Random() * 3);
+      624:  125:	printf("%d\n",type);
+      624:  126:	switch(type) 
+        -:  127:	{
+        -:  128:		case 0:
+      214:  129:			return copper;
+        -:  130:			break;
+        -:  131:		case 1:
+      198:  132:			return silver;
+        -:  133:			break;
+        -:  134:		case 2:
+      212:  135:			return gold;
+        -:  136:			break;
+        -:  137:	}
+    #####:  138:	return 0;
+        -:  139:}
+        -:  140:
+        1:  141:int main (int argc, char** argv) 
+        -:  142:{
+        -:  143:	struct gameState G;
+        1:  144:  	struct gameState *p = &G;
+        1:  145:	int money = 0;
+        -:  146:
+        1:  147:	SelectStream(1);
+        1:  148:	PutSeed(atoi(argv[1]));
+        -:  149:  	
+        1:  150:	int k[10] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+        1:  151:	getKingdomCards(k);
+        -:  152:
+        1:  153: 	printf("Starting game.\n");
+        -:  154:
+        1:  155:	int numplayers = (int)((Random() * 3) + 2);
+        1:  156:  	initializeGame(numplayers, k, atoi(argv[1]), p);
+        -:  157:
+        1:  158:	int i = 0;
+      130:  159:	while(!isGameOver(p)) 
+        -:  160:	{
+      515:  161:		while(i<numHandCards(p)) 
+        -:  162:		{
+      259:  163:          	if(handCard(i, p) == copper)
+        -:  164:			{
+       88:  165:            	playCard(i, -1, -1, -1, p);
+       88:  166:            	money++;
+        -:  167:          	}
+      171:  168:          	else if(handCard(i, p) == silver)
+        -:  169:			{
+       62:  170:            	playCard(i, -1, -1, -1, p);
+       62:  171:            	money += 2;
+        -:  172:          	}
+      109:  173:          	else if (handCard(i, p) == gold)
+        -:  174:			{
+       26:  175:            	playCard(i, -1, -1, -1, p);
+       26:  176:            	money += 3;
+        -:  177:          	}
+      259:  178:        	i++;
+        -:  179:		}	
+        -:  180:	
+        -:  181:		//code for attempting to play cards
+      128:  182:		int tried = 0;
+      128:  183:		int mon = 0;
+        -:  184:		int ret;
+   115462:  185:		while(p->numActions > 0 && tried < 1000) 
+        -:  186:		{
+   115206:  187:			int pos = (int)(Random() * (float)numHandCards(p));
+   115206:  188:			int card = handCard(pos,p);
+        -:  189:			int playcard;
+   115206:  190:			if( (card != curse) && (card != copper) && 
+    48705:  191:				(card != silver) && (card != gold) && 
+    36545:  192:				(card != province) && (card != duchy) && 
+        -:  193:				(card != estate) ) 
+        -:  194:			{
+    18018:  195:				switch(card) 
+        -:  196:				{
+        -:  197:				case adventurer:
+        1:  198:						ret = playCard(pos,-1,-1,-1,p);
+        1:  199:						if(ret == -1) 
+    #####:  200:							printf("Failed to play adventurer card\n");
+        -:  201:						else 
+        1:  202:							printf("Played adventurer card\n");
+        1:  203:						break;
+        -:  204:				case council_room:
+    #####:  205:						ret = playCard(pos,-1,-1,-1,p);
+    #####:  206:						if(ret == -1) 
+    #####:  207:							printf("Failed to play council_room card\n");
+        -:  208:						else 
+    #####:  209:							printf("Played council_room card\n");
+    #####:  210:						break;
+        -:  211:				case feast:
+    #####:  212:						ret = playCard(pos,findSupplyCard(k,5),-1,-1,p);
+    #####:  213:						if(ret == -1) 
+    #####:  214:							printf("Failed to play feast card\n");
+        -:  215:						else 
+    #####:  216:							printf("Played feast card\n");
+    #####:  217:						break;
+        -:  218:				case gardens:
+    #####:  219:						ret = playCard(pos,-1,-1,-1,p);
+    #####:  220:						if(ret == -1) 
+    #####:  221:							printf("Failed to play gardens card\n");
+        -:  222:                        else 
+    #####:  223:							printf("Played gardens card\n");
+    #####:  224:						break;
+        -:  225:				case mine:
+      624:  226:						mon = getMoneyType();
+        -:  227:						//printf("\t\t\t%d\n",myGetCost(mon));
+      624:  228:                        ret = playCard(pos,findHandMoney(p),mon,-1,p);
+      624:  229:                        if(ret == -1) 
+      620:  230:							printf("Failed to play mine card %d\n",mon);
+        -:  231:                        else 
+        4:  232:							printf("Played mine card\n");
+      624:  233:                        break;
+        -:  234:				case remodel:
+    #####:  235:						playcard = (int)(Random() * numHandCards(p));
+    #####:  236:                        ret = playCard(pos,playcard,findSupplyCard(k,myGetCost(handCard(playcard,p)) + 2),-1,p);
+    #####:  237:                        if(ret == -1) 
+    #####:  238:							printf("Failed to play remodel card\n");
+        -:  239:                        else 
+    #####:  240:							printf("Played remodel card\n");
+    #####:  241:                        break;
+        -:  242:                case smithy:
+    #####:  243:                        ret = playCard(pos,-1,-1,-1,p);
+    #####:  244:                        if(ret == -1) 
+    #####:  245:							printf("Failed to play smithy card\n");
+        -:  246:                        else 
+    #####:  247:							printf("Played smithy card\n");
+    #####:  248:                        break;
+        -:  249:                case village:
+    #####:  250:                        ret = playCard(pos,-1,-1,-1,p);
+    #####:  251:                        if(ret == -1) 
+    #####:  252:							printf("Failed to play village card\n");
+        -:  253:						else 
+    #####:  254:							printf("Played village card\n");    
+    #####:  255:						break;
+        -:  256:                case baron:
+        8:  257:                      	ret = playCard(pos,(int)(Random() * 2),-1,-1,p);
+        8:  258:						if(ret == -1) 
+    #####:  259:							printf("Failed to play baron card\n");
+        -:  260:						else 
+        8:  261:							printf("Played baron card\n");
+        8:  262:						break;
+        -:  263:				case great_hall:
+    #####:  264:						ret = playCard(pos,-1,-1,-1,p);
+    #####:  265:       	                if(ret == -1) 
+    #####:  266:							printf("Failed to play great_hall card\n");
+        -:  267:          	            else 
+    #####:  268:							printf("Played great_hall card\n");
+    #####:  269:						break;
+        -:  270:                case minion:
+        4:  271:                        ret = playCard(pos,(int)(Random() * 2 + 1),-1,-1,p);
+        4:  272:                        if(ret == -1) 
+    #####:  273:							printf("Failed to play minion card\n");
+        -:  274:                        else 
+        4:  275:							printf("Played minion card\n");
+        4:  276:                        break;
+        -:  277:				}
+        -:  278:			}
+   115206:  279:			tried ++;
+        -:  280:		}
+        -:  281:
+        -:  282:	//code for attempting to buy cards
+      128:  283:		tried = 0;
+     1887:  284:		while(p->numBuys > 0 && tried < 100) 
+        -:  285:		{
+     1631:  286:			int buyMoney = (int)(Random() * 2);
+     1631:  287:			if(buyMoney) 
+        -:  288:			{
+      843:  289:				if(money >= 6) 
+        -:  290:				{
+      841:  291:					ret = buyCard(gold,p);
+      841:  292:					if(ret != -1) 
+       26:  293:						printf("Bought gold\n");
+        -:  294:				}
+      843:  295:				if(money >= 3) 
+        -:  296:				{
+      843:  297:                    ret = buyCard(silver,p);
+      843:  298:                    if(ret != -1) 
+       40:  299:						printf("Bought silver\n");
+        -:  300:                }
+        -:  301:				else 
+        -:  302:				{
+    #####:  303:                    ret = buyCard(copper,p);
+    #####:  304:                    if(ret != -1) 
+    #####:  305:						printf("Bought copper\n");
+        -:  306:               	}
+        -:  307:			}else 
+        -:  308:			{
+      788:  309:				int cardToBuy = findSupplyCard(k,money);
+      788:  310:				ret = buyCard(cardToBuy,p);
+      788:  311:				if(ret != -1) 
+       54:  312:					printf("Bought card %d\n",cardToBuy);
+        -:  313:			}
+     1631:  314:			tried ++;
+        -:  315:		}
+      128:  316:		endTurn(p);
+      512:  317:		for(i = 0; i < numplayers; i ++) 
+        -:  318:		{
+      384:  319:			printf("Player %d: %d\n",i,scoreFor(i,p));
+        -:  320:		}
+        -:  321:	}
+        1:  322:	printf ("Finished game.\n");
+        4:  323:	for(i = 0; i < numplayers; i ++) 
+        -:  324:	{
+        3:  325:    	printf("Player %d: %d\n",i,scoreFor(i,p));
+        -:  326:    }
+        1:  327:	return 0;
+        -:  328:}
+        -:  329:

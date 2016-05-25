@@ -4,7 +4,7 @@ rngs.o: rngs.h rngs.c
 	gcc -c rngs.c -g  $(CFLAGS)
 
 dominion.o: dominion.h dominion.c rngs.o
-	gcc -c dominion.c -g  $(CFLAGS)
+	gcc -c dominion.c -g -std=c99  $(CFLAGS)
 
 unittest1: unittest1.c dominion.o
 	gcc -o unittest1 -g unittest1.c dominion.o rngs.o $(CFLAGS)

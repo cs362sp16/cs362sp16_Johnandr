@@ -35,8 +35,8 @@ int* kingdomCards(int k1, int k2, int k3, int k4, int k5, int k6, int k7,
 }
 
 int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
-				   struct gameState *state) {
-
+				   struct gameState *state) 
+{
   int i;
   int j;
   int it;			
@@ -775,30 +775,49 @@ int feastCard(struct gameState *state, int *temphand, int *currentPlayer, int *c
   return 0;
 }
 
-int mineCard(struct gameState *state, int *currentPlayer, int *choice1, int *choice2, int *handPos){
+int mineCard(struct gameState *state, int *choice1, int *choice2, int handPos)
+{
+  int currentPlayer = whoseTurn(state);
 
   int choice1_mine = *choice1;
   int choice2_mine = *choice2;
   int j;
   int i;
 
-  j = state->hand[*currentPlayer][choice1_mine];  //store card we will trash
-  if (state->hand[*currentPlayer][choice1_mine] < copper || state->hand[*currentPlayer][choice1_mine] > gold)
-    return -1;
+  j = state->hand[currentPlayer][choice1_mine];  //store card we will trash
+  if (state->hand[currentPlayer][choice1_mine] < copper || state->hand[currentPlayer][choice1_mine] > gold)
+  {
+  	printf("DEBUG\t\tMINECARD FIRST IF STATEMENT BAD\n");
+    printf("state->hand[player][choice1] = %d , copper = %d, gold = %d\n", state->hand[currentPlayer][choice1_mine], copper, gold);
+	return -1;
+  }
   if (choice2_mine > treasure_map || choice2_mine < curse)
+  {
+  	printf("DEBUG\t\tMINECARD SECOND IF STATEMENT BAD\n");
+	if (choice2_mine > treasure_map)
+		printf("First Parameter\n");
+	else
+		printf("Second Parameter\n");
     return -1;
-  if ( (getCost(state->hand[*currentPlayer][choice1_mine]) + 3) > getCost(choice2_mine) )
-    return -1;
+  }
+  if ( (getCost(state->hand[currentPlayer][choice1_mine]) + 3) > getCost(choice2_mine) )
+  {
+  	//printf("DEBUG\t\tMINECARD THIRD IF STATEMENT BAD\n");
+    //printf("%d\t\t%d\n", state->hand[currentPlayer][choice1_mine] + 3, getCost(choice2_mine) );
+	return -1;
+  }
 
-  gainCard(choice2_mine, state, 2, *currentPlayer);
+  gainCard(choice2_mine, state, 2, currentPlayer);
 
   //discard card from hand
-  discardCard(*handPos, *currentPlayer, state, 0);
+  discardCard(handPos, currentPlayer, state, 0);
 
   //discard trashed card
-  for (i = 0; i < state->handCount[*currentPlayer]; i++){
-    if (state->hand[*currentPlayer][i] == j){
-      discardCard(i, *currentPlayer, state, 0);      
+  for (i = 0; i < state->handCount[currentPlayer]; i++)
+  {
+    if (state->hand[currentPlayer][i] == j)
+	{
+      discardCard(i, currentPlayer, state, 0);      
       break;
     }
   }
@@ -1244,7 +1263,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 		return -1;
 
 	  case mine:
-    	return mineCard(state, &currentPlayer, &choice1, &choice2, &handPos);
+    	return mineCard(state, &choice1, &choice2, handPos);
 		
 	  case remodel:
     	return remodelCard(state, &currentPlayer, &choice1, &choice2, &handPos);
