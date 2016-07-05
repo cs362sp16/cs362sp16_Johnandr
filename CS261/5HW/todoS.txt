@@ -1,5 +1,0 @@
-0	Take Nap
-3	Do Assignment 5
-1	Study Heap-Based Priority Queue
-101	Review Trees for Midterm 2
-10	Walk
